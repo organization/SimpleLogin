@@ -1,0 +1,22 @@
+name: SimpleLogin
+main: SimpleLogin\SimpleLogin
+version: "4.1"
+author: maru
+api:
+- 1.12.0
+- 1.13.0
+- 2.0.0
+
+permissions:
+ simplelogin.command.register:
+  descript: "가입 퍼미션"
+  default: true
+ simplelogin.command.login:
+  descript: "로그인 퍼미션"
+  default: true
+ simplelogin.command.unregister:
+  descript: "탈퇴 퍼미션"
+  default: true
+ simplelogin.command.manage:
+  descript: "관리 퍼미션"
+  default: OP

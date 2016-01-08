@@ -1,0 +1,51 @@
+m_version: 5
+
+default-language: "kor"
+
+#(EN) ENGLISH
+eng: true
+
+#(KO) KOREAN
+kor: true
+kor-default-prefix: "[로그인]"
+
+kor-command-login: "로그인"
+kor-command-register: "가입"
+kor-command-unregister: "탈퇴"
+kor-command-manage: "계정관리"
+kor-command-change: "변경"
+kor-command-subaccount: "부계정허용"
+
+kor-command-login-help: "/로그인 <비밀번호>"
+kor-command-login-description: "로그인을 합니다."
+
+kor-command-register-help: "/가입 <비밀번호>"
+kor-command-register-description: "가입을 합니다."
+kor-command-unregister-help: "/탈퇴 <비밀번호>"
+kor-command-unregister-description: "탈퇴를 합니다."
+
+kor-command-manage-help: "/계정관리 <탈퇴>|<변경>|<부계정허용>"
+kor-command-manage-help1: "/계정관리 <탈퇴> <플레이어>"
+kor-command-manage-help2: "/계정관리 <변경> <플레이어> <비밀번호>"
+kor-command-manage-help3: "/계정관리 <부계정허용>"
+kor-command-manage-description: "유저의 계정을 관리합니다."
+
+
+kor-password-too-short: "비밀번호가 너무 짧습니다!"
+kor-already-login: "당신은 로그인 되어있습니다."
+kor-already-register: "이미 가입되어 있습니다."
+kor-dont-register: "가입되어 있지 않습니다."
+kor-different-password: "비밀번호가 틀렸습니다. 비밀번호가 기억이 안나는 경우 관리자에게 문의해주세요."
+kor-to-login: "로그인 하시면 서버를 이용하실수 있습니다."
+kor-cant-find-player: "해당 유저는 서버에 가입한적이 없는 유저입니다."
+kor-already-login: "이미 이 닉네임으로 누군가가 로그인해 있습니다."
+kor-already-have-account: "당신은 이미 %player%계정이 있습니다. 해당 아이디로 로그인해 주세요."
+kor-cant-use-this-name: "당신은 이 닉네임을 사용할 수 없습니다. 닉네임을 바꿔주세요."
+
+kor-register-success: "성공적으로 가입했습니다."
+kor-login-success: "성공적으로 로그인했습니다."
+kor-unregister-success: "성공적으로 탈퇴했습니다."
+kor-manage-success: "성공적으로 계정정보를 변경했습니다."
+kor-subaccount-allow: "부계정이 허용되었습니다."
+kor-subaccount-disallow: "부계정이 비허용되었습니다."
+kor-timeout: "로그인 시간이 초과되었습니다."
