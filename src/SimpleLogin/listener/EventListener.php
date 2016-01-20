@@ -22,6 +22,8 @@ use pocketmine\event\inventory\InventoryPickupItemEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\utils\TextFormat;
 use SimpleLogin\task\timeoutKickTask;
+use pocketmine\event\player\PlayerKickEvent;
+use pocketmine\event\inventory\InventoryOpenEvent;
 
 class EventListener implements Listener {
 	/**
@@ -294,6 +296,9 @@ else {
 		}
 	}
 	public function onPlayerQuit(PlayerQuitEvent $event) {
+		if (TextFormat::clean($event->getQuitMessage()) == "%multiplayer.player.left") {
+			return;
+		}
 		$player = $event->getPlayer ();
 		unset ( $this->islogin [strtolower ( $player->getName () )] );
 		return true;
@@ -350,6 +355,21 @@ else {
 					break;
 				}
 			}
+		}
+	}
+	public function onKick(PlayerKickEvent $event) {
+		$player = $event->getPlayer ();
+		if ($this->isLogin ( $player )) {
+			if ($event->getReason () == "logged in from another location") {
+				$event->setCancelled ();
+				return;
+			}
+		}
+	}
+	public function InventoryOpen(InventoryOpenEvent $event) {
+		$player = $event->getPlayer();
+		if(!$this->isLogin($player)) {
+			$event->setCancelled();
 		}
 	}
 }

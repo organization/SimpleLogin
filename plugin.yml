@@ -1,6 +1,6 @@
 name: SimpleLogin
 main: SimpleLogin\SimpleLogin
-version: "4.1"
+version: "4.2"
 author: maru
 api:
 - 1.12.0
