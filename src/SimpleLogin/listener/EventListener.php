@@ -366,12 +366,6 @@ else {
 			}
 		}
 	}
-	public function InventoryOpen(InventoryOpenEvent $event) {
-		$player = $event->getPlayer();
-		if(!$this->isLogin($player)) {
-			$event->setCancelled();
-		}
-	}
 }
 
 ?>
