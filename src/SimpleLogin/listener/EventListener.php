@@ -40,6 +40,7 @@ class EventListener implements Listener {
 	 * @var Server
 	 */
 	private $server;
+	private $kickev = [];
 	public function __construct(Plugin $plugin) {
 		$this->plugin = $plugin;
 		$this->db = PluginData::getInstance ();
@@ -296,10 +297,12 @@ else {
 		}
 	}
 	public function onPlayerQuit(PlayerQuitEvent $event) {
-		if (TextFormat::clean($event->getQuitMessage()) == "%multiplayer.player.left") {
-			return;
-		}
 		$player = $event->getPlayer ();
+		if(isset($this->kickev[$player->getName()])) {
+			unset($this->kickev[$player->getName()]);
+			return;
+			
+		}
 		unset ( $this->islogin [strtolower ( $player->getName () )] );
 		return true;
 	}
@@ -361,6 +364,7 @@ else {
 		$player = $event->getPlayer ();
 		if ($this->isLogin ( $player )) {
 			if ($event->getReason () == "logged in from another location") {
+				$this->kickev[$player->getName()] = true;
 				$event->setCancelled ();
 				return;
 			}
