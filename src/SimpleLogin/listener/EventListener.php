@@ -247,7 +247,7 @@ else {
 			if ($message {0} === "/") {
 				$command = substr ( $message, 1 );
 				$args = explode ( " ", $command );
-				if ($args [0] == "가입" or $args [0] == "로그인") {
+				if ($args [0] == $this->db->get("command-register") or $args [0] == $this->db->get("command-login")) {
 					return true;
 				} else {
 					$event->setCancelled ();
