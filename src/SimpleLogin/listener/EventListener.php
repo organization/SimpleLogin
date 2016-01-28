@@ -40,7 +40,7 @@ class EventListener implements Listener {
 	 * @var Server
 	 */
 	private $server;
-	private $kickev = [];
+	private $kickev = [ ];
 	public function __construct(Plugin $plugin) {
 		$this->plugin = $plugin;
 		$this->db = PluginData::getInstance ();
@@ -149,13 +149,24 @@ else {
 			}
 			return true;
 		}
+		// 탈퇴 입력시
 		if (strtolower ( $command ) == $this->db->get ( "command-unregister" )) {
-			if ($this->isLogin ( $player )) {
-				unset ( $this->db->db [strtolower ( $player->getName () )] );
-				$this->db->message ( $player, $this->db->get ( "unregister-success" ) );
-				unset ( $this->islogin [strtolower ( $player->getName () )] );
+			// 아무것도 입력 안할시
+			if (! isset ( $args [0] )) {
+				$this->db->message ( $player, $this->db->get ( "command-unregister-help" ) );
 				return true;
 			}
+			// 입력한 패스워드가 맞다면 탈퇴
+			if (md5 ( $args [0] ) == $this->db->db [strtolower ( $player->getName () )] ["password"]) {
+				unset ( $this->db->db [strtolower ( $player->getName () )] );
+				unset ( $this->islogin [strtolower ( $player->getName () )] );
+				$this->db->message ( $player, $this->db->get ( "unregister-success" ) );
+				return true;
+			} else { // 패스워드가 틀렸을때
+				$this->db->message ( $player, $this->db->get ( "command-unregister-help" ) ); // 따로 메시지 만들어야 되나...
+				return true;
+			}
+			return true;
 		}
 		// 계정관리 입력시
 		if (strtolower ( $command ) == $this->db->get ( "command-manage" )) {
@@ -247,7 +258,7 @@ else {
 			if ($message {0} === "/") {
 				$command = substr ( $message, 1 );
 				$args = explode ( " ", $command );
-				if ($args [0] == $this->db->get("command-register") or $args [0] == $this->db->get("command-login")) {
+				if ($args [0] == $this->db->get ( "command-register" ) or $args [0] == $this->db->get ( "command-login" )) {
 					return true;
 				} else {
 					$event->setCancelled ();
@@ -298,10 +309,9 @@ else {
 	}
 	public function onPlayerQuit(PlayerQuitEvent $event) {
 		$player = $event->getPlayer ();
-		if(isset($this->kickev[$player->getName()])) {
-			unset($this->kickev[$player->getName()]);
+		if (isset ( $this->kickev [$player->getName ()] )) {
+			unset ( $this->kickev [$player->getName ()] );
 			return;
-			
 		}
 		unset ( $this->islogin [strtolower ( $player->getName () )] );
 		return true;
@@ -364,7 +374,7 @@ else {
 		$player = $event->getPlayer ();
 		if ($this->isLogin ( $player )) {
 			if ($event->getReason () == "logged in from another location") {
-				$this->kickev[$player->getName()] = true;
+				$this->kickev [$player->getName ()] = true;
 				$event->setCancelled ();
 				return;
 			}
