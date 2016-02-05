@@ -23,7 +23,6 @@ use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\utils\TextFormat;
 use SimpleLogin\task\timeoutKickTask;
 use pocketmine\event\player\PlayerKickEvent;
-use pocketmine\event\inventory\InventoryOpenEvent;
 
 class EventListener implements Listener {
 	/**
@@ -114,8 +113,9 @@ class EventListener implements Listener {
 				$this->db->message ( $player, $this->db->get ( "register-success" ) );
 				$this->islogin [$player->getName ()] = true;
 				return true;
-			}  // 로그인 되있는 경우
-else {
+			}  
+			// 로그인 되있는 경우
+			else {
 				$this->db->alert ( $player, $this->db->get ( "already-login" ) );
 				return true;
 			}
@@ -131,8 +131,9 @@ else {
 			if ($this->isLogin ( $player )) {
 				$this->db->alert ( $player, $this->db->get ( "already-login" ) );
 				return true;
-			}  // 로그인이 되어있지 않을때
-else {
+			}  
+			// 로그인이 되어있지 않을때
+			else {
 				$password = ( string ) $args [0];
 				// 패스워드가 맞다면 로그인
 				if (md5 ( $password ) == $this->db->db [strtolower ( $player->getName () )] ["password"]) {
@@ -141,8 +142,9 @@ else {
 					$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $this->clientid [$player->getName ()];
 					$this->islogin [strtolower ( $player->getName () )] = true;
 					return true;
-				}  // 패스워드가 틀렸을때
-else {
+				}  
+				// 패스워드가 틀렸을때
+				else {
 					$this->db->alert ( $player, $this->db->get ( "different-password" ) );
 					return true;
 				}
@@ -223,16 +225,18 @@ else {
 				$this->db->alert ( $player, $this->db->get ( "command-register-help" ) );
 			}
 			return true;
-		}  // 가입되있을떄
-else {
+		}  
+		// 가입되있을떄
+		else {
 			// 마지막 접속 아이피와 지금 아이피가 같다면 자동로그인
 			if ($player->getAddress () == $this->db->db [strtolower ( $player->getName () )] ["ip"]) {
 				$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $player->getClientId ();
 				$this->db->message ( $player, $this->db->get ( "login-success" ) );
 				$this->islogin [strtolower ( $player->getName () )] = true;
 				return true;
-			}  // 다르다면 로그인 메시지
-else {
+			}  
+			// 다르다면 로그인 메시지
+			else {
 				for($i = 0; $i < 5; $i ++) {
 					$this->db->alert ( $player, $this->db->get ( "command-login-help" ) );
 				}
@@ -247,9 +251,7 @@ else {
 			if ($message {0} === "/") {
 				$command = substr ( $message, 1 );
 				$args = explode ( " ", $command );
-				if ($args [0] == $this->db->get("command-register") or $args [0] == $this->db->get("command-login")) {
-					return true;
-				} else {
+				if ((!(strtolower($args [0]) == $this->db->get("command-register"))) and (!(strtolower($args [0]) == $this->db->get("command-login")))) {
 					$event->setCancelled ();
 				}
 			} else {
@@ -265,7 +267,6 @@ else {
 				return true;
 			}
 		}
-		return true;
 	}
 	public function onPlayerMove(PlayerMoveEvent $event) {
 		$player = $event->getPlayer ();
