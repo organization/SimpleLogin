@@ -87,7 +87,7 @@ class EventListener implements Listener {
 	}
 	public function onCommand(CommandSender $player, Command $command, $label, array $args) {
 		// 가 입 입력시
-		if (strtolower ( $command ) == $this->db->get ( "command-register" )) {
+		if (strtolower ( $command ) === $this->db->get ( "command-register" )) {
 			if (! isset ( $args [0] )) {
 				// TODO - 명령어만 쳤을경우 도움말 표시
 				$this->db->alert ( $player, $this->db->get ( "command-register-help" ) );
@@ -107,7 +107,7 @@ class EventListener implements Listener {
 					return true;
 				}
 				// 데이터베이스에 플레이어 정보 저장
-				$this->db->db [strtolower ( $player->getName () )] ["password"] = md5 ( $password );
+				$this->db->db [strtolower ( $player->getName () )] ["password"] = hash("sha512", $password);
 				$this->db->db [strtolower ( $player->getName () )] ["ip"] = $player->getAddress ();
 				$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $this->clientid [$player->getName ()];
 				$this->db->message ( $player, $this->db->get ( "register-success" ) );
@@ -135,9 +135,18 @@ class EventListener implements Listener {
 			// 로그인이 되어있지 않을때
 			else {
 				$password = ( string ) $args [0];
-				// 패스워드가 맞다면 로그인
-				if (md5 ( $password ) == $this->db->db [strtolower ( $player->getName () )] ["password"]) {
+				// 패스워드가 맞다면 로그인 
+				if (hash("sha512", $password) === $this->db->db [strtolower ( $player->getName () )] ["password"]) {
 					$this->db->message ( $player, $this->db->get ( "login-success" ) );
+					$this->db->db [strtolower ( $player->getName () )] ["ip"] = $player->getAddress ();
+					$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $this->clientid [$player->getName ()];
+					$this->islogin [strtolower ( $player->getName () )] = true;
+					return true;
+				}  
+				//MD5를 이용하고 있다면 SHA512로 변환
+				else if (md5 ( $password ) === $this->db->db [strtolower ( $player->getName () )] ["password"]) {
+					$this->db->message ( $player, $this->db->get ( "login-success" ) );
+					$this->db->db [strtolower ( $player->getName () )] ["password"] = hash("sha512", $password );
 					$this->db->db [strtolower ( $player->getName () )] ["ip"] = $player->getAddress ();
 					$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $this->clientid [$player->getName ()];
 					$this->islogin [strtolower ( $player->getName () )] = true;
@@ -151,7 +160,7 @@ class EventListener implements Listener {
 			}
 			return true;
 		}
-		if (strtolower ( $command ) == $this->db->get ( "command-unregister" )) {
+		if (strtolower ( $command ) === $this->db->get ( "command-unregister" )) {
 			if ($this->isLogin ( $player )) {
 				unset ( $this->db->db [strtolower ( $player->getName () )] );
 				$this->db->message ( $player, $this->db->get ( "unregister-success" ) );
@@ -160,7 +169,7 @@ class EventListener implements Listener {
 			}
 		}
 		// 계정관리 입력시
-		if (strtolower ( $command ) == $this->db->get ( "command-manage" )) {
+		if (strtolower ( $command ) === $this->db->get ( "command-manage" )) {
 			// 아무것도 입력 안할시 도움말
 			if (! isset ( $args [0] )) {
 				$this->db->alert ( $player, $this->db->get ( "command-manage-help" ) );
@@ -226,7 +235,7 @@ class EventListener implements Listener {
 			}
 			return true;
 		}  
-		// 가입되있을떄
+		// 가입되있을때
 		else {
 			// 마지막 접속 아이피와 지금 아이피가 같다면 자동로그인
 			if ($player->getAddress () == $this->db->db [strtolower ( $player->getName () )] ["ip"]) {
