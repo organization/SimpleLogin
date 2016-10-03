@@ -107,7 +107,7 @@ class EventListener implements Listener {
 					return true;
 				}
 				// 데이터베이스에 플레이어 정보 저장
-				$this->db->db [strtolower ( $player->getName () )] ["password"] = md5 ( $password );
+				$this->db->db [strtolower ( $player->getName () )] ["password"] = hash("sha512", $password);
 				$this->db->db [strtolower ( $player->getName () )] ["ip"] = $player->getAddress ();
 				$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $this->clientid [$player->getName ()];
 				$this->db->message ( $player, $this->db->get ( "register-success" ) );
@@ -135,9 +135,18 @@ class EventListener implements Listener {
 			// 로그인이 되어있지 않을때
 			else {
 				$password = ( string ) $args [0];
-				// 패스워드가 맞다면 로그인
-				if (md5 ( $password ) == $this->db->db [strtolower ( $player->getName () )] ["password"]) {
+				// 패스워드가 맞다면 로그인 
+				if (hash("sha512", $password) == $this->db->db [strtolower ( $player->getName () )] ["password"]) {
 					$this->db->message ( $player, $this->db->get ( "login-success" ) );
+					$this->db->db [strtolower ( $player->getName () )] ["ip"] = $player->getAddress ();
+					$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $this->clientid [$player->getName ()];
+					$this->islogin [strtolower ( $player->getName () )] = true;
+					return true;
+				}  
+				//MD5를 이용하고 있다면 SHA512로 변환
+				else if (md5 ( $password ) == $this->db->db [strtolower ( $player->getName () )] ["password"]) {
+					$this->db->message ( $player, $this->db->get ( "login-success" ) );
+					$this->db->db [strtolower ( $player->getName () )] ["password"] = hash("sha512", $password );
 					$this->db->db [strtolower ( $player->getName () )] ["ip"] = $player->getAddress ();
 					$this->db->db [strtolower ( $player->getName () )] ["uuid"] = $this->clientid [$player->getName ()];
 					$this->islogin [strtolower ( $player->getName () )] = true;
