@@ -235,7 +235,7 @@ class EventListener implements Listener {
 			}
 			return true;
 		}  
-		// 가입되있을떄
+		// 가입되있을때
 		else {
 			// 마지막 접속 아이피와 지금 아이피가 같다면 자동로그인
 			if ($player->getAddress () == $this->db->db [strtolower ( $player->getName () )] ["ip"]) {
